@@ -3,7 +3,9 @@ from PIL import Image
 import requests
 from io import BytesIO
 import spacy  # Import spaCy for NLP processing
-
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
 def load_blip_model():
     """Load a pre-trained BLIP model for image-to-text generation."""
     processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
@@ -18,7 +20,6 @@ def preprocess_image(image_path):
     else:
         image = Image.open(image_path).convert("RGB")
     return image
-
 def generate_description(processor, model, image):
     """Generate a descriptive caption for the given image."""
     inputs = processor(images=image, return_tensors="pt")
@@ -35,19 +36,26 @@ def generate_tags(description):
     # Extract main words (e.g., nouns, proper nouns, and adjectives)
     tags = [token.text for token in doc if token.pos_ in {"NOUN", "PROPN", "ADJ"}]
     return tags
-
-if _name_ == "_main_":
+    if _name_ == "_main_":
     # Load BLIP model
     processor, model = load_blip_model()
 
     # Provide an image URL or path
-    image_path = "beach.jpg"  # Replace with your image URL or path
-    image = preprocess_image(image_path)
+    image_path = "image.jpg"  # Replace with your image URL or path
+    image1 = preprocess_image(image_path)
+    
+    from tensorflow.keras.preprocessing import image
+
+    img=image.load_img(image_path,target_size=(224,224))
+    plt.imshow(img)
+    plt.axis('off')  # Optional: Remove axes for better visualization
+    plt.show()
 
     # Generate description
-    description = generate_description(processor, model, image)
+    description = generate_description(processor, model, image1)
     print("Generated Description:")
     print(description)
+    
 
     # Generate tags
     tags = generate_tags(description)
