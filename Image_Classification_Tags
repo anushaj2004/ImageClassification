@@ -36,7 +36,7 @@ def generate_tags(description):
     # Extract main words (e.g., nouns, proper nouns, and adjectives)
     tags = [token.text for token in doc if token.pos_ in {"NOUN", "PROPN", "ADJ"}]
     return tags
-    if _name_ == "_main_":
+    if __name__ == "__main__":
     # Load BLIP model
     processor, model = load_blip_model()
 
